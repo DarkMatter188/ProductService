@@ -50,7 +50,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     public List<Product> getProductByCategory(String category) {
-        FakeStoreProductDto fakeStoreProductDtos[] = restTemplate.getForObject("https://fakestoreapi.com/products/category/" + "jewelery",
+        FakeStoreProductDto fakeStoreProductDtos[] = restTemplate.getForObject("https://fakestoreapi.com/products/category/" + category,
                 FakeStoreProductDto[].class);
         List<Product> products = new ArrayList<>();
         for(FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos) {
