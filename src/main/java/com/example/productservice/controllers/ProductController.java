@@ -30,5 +30,11 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/category/{category}")
+    public List<Product> getProductsByCategory(@PathVariable("category") String category){
+        System.out.println("Category: " + category);
+        return productService.getProductByCategory(category);
+
+    }
 
 }
