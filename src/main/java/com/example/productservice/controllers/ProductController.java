@@ -24,10 +24,23 @@ public class ProductController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
-        ResponseEntity<Product> responseEntity = new ResponseEntity<>(
-                productService.getSingleProduct(id),
-                HttpStatus.OK
-        );
+        //Exception Handling
+        ResponseEntity<Product> responseEntity = null;
+        try {
+            Product product = productService.getSingleProduct(id);
+            responseEntity = new ResponseEntity<>(
+                    product,
+                    HttpStatus.OK
+            );
+        }catch (RuntimeException e){
+            responseEntity = new ResponseEntity<>(
+                    HttpStatus.NOT_FOUND
+            );
+        }
+//        ResponseEntity<Product> responseEntity = new ResponseEntity<>(
+//                productService.getSingleProduct(id),
+//                HttpStatus.OK
+//        );
         return responseEntity;
     }
 
