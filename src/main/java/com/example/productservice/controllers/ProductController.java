@@ -3,6 +3,8 @@ package com.example.productservice.controllers;
 import com.example.productservice.ProductService.ProductService;
 import com.example.productservice.models.Product;
 import org.springframework.boot.autoconfigure.web.client.RestClientAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,9 +23,12 @@ public class ProductController {
         this.restClientAutoConfiguration = restClientAutoConfiguration;
     }
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
-
-        return productService.getSingleProduct(id);
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
+        ResponseEntity<Product> responseEntity = new ResponseEntity<>(
+                productService.getSingleProduct(id),
+                HttpStatus.OK
+        );
+        return responseEntity;
     }
 
     @GetMapping()
