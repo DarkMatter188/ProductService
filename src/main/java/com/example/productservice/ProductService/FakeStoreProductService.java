@@ -1,12 +1,10 @@
 package com.example.productservice.ProductService;
 
 import com.example.productservice.dtos.FakeStoreProductDto;
+import com.example.productservice.exceptions.ProductNotFoundException;
 import com.example.productservice.models.Category;
 import com.example.productservice.models.Product;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
@@ -44,12 +42,16 @@ public class FakeStoreProductService implements ProductService {
 
 
     @Override
-    public Product getSingleProduct(Long id) {
+    public Product getSingleProduct(Long id) throws ProductNotFoundException {
 
-//        throw new RuntimeException("Something went wrong");
+//        throw new ArithmeticException();
 
         FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id,
                 FakeStoreProductDto.class);
+
+        if(fakeStoreProductDto == null){
+            throw new ProductNotFoundException("Product with id" + id + "does not exist");
+        }
         return convertFakeStoreProductToProduct(fakeStoreProductDto);
     }
 
@@ -163,4 +165,11 @@ public class FakeStoreProductService implements ProductService {
         restTemplate.delete("https://fakestoreapi.com/products/" + id);
     }
 
+    public ResponseEntity<String> handleArithmeticException(){
+        ResponseEntity<String> respone = new ResponseEntity<>(
+                "Arithmetic exception handled from Service class",
+                HttpStatus.BAD_GATEWAY
+        );
+        return respone;
+    }
 }
