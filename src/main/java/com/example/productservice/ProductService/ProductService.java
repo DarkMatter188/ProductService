@@ -12,4 +12,12 @@ public interface ProductService {
     List<Product> getAllProducts();
 
     List<Product> getProductByCategory(String category);
+
+    Product updateProduct(Long id, Product product);
+    Product replaceProduct(Long id, Product product);
+
+    Product addNewProduct(Product product);
+
+    void deleteProduct(Long id);
+
 }
