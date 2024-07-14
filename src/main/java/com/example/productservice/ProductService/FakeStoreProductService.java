@@ -50,7 +50,7 @@ public class FakeStoreProductService implements ProductService {
                 FakeStoreProductDto.class);
 
         if(fakeStoreProductDto == null){
-            throw new ProductNotFoundException("Product with id" + id + "does not exist");
+            throw new ProductNotFoundException("Product with id does not exist ", id);
         }
         return convertFakeStoreProductToProduct(fakeStoreProductDto);
     }

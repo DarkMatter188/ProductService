@@ -32,14 +32,28 @@ public class GlobalExceptionHandler {
 //        return response;
 //    }
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ExceptionDto> handleProductNotFoundException(){
-        ExceptionDto exceptionDto = new ExceptionDto();
-        exceptionDto.setMessage("Product not found");
-        exceptionDto.setSolution("Please try again with a valid ID");
 
-        ResponseEntity<ExceptionDto> response = new ResponseEntity<>(
-                exceptionDto,
+    //Passing exception as key value pair from dto object
+//    @ExceptionHandler(ProductNotFoundException.class)
+//    public ResponseEntity<ExceptionDto> handleProductNotFoundException(){
+//        ExceptionDto exceptionDto = new ExceptionDto();
+//        exceptionDto.setMessage("Product not found");
+//        exceptionDto.setSolution("Please try again with a valid ID");
+//
+//        ResponseEntity<ExceptionDto> response = new ResponseEntity<>(
+//                exceptionDto,
+//                HttpStatus.BAD_GATEWAY
+//        );
+//        return response;
+//    }
+
+
+    //Trying to pass invalid uid along with http status in case of wrong uid given
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex){
+        String msg = "Product with id " + ex.getUid() + " not found";
+        ResponseEntity<Object> response = new ResponseEntity<>(
+                msg,
                 HttpStatus.BAD_GATEWAY
         );
         return response;
