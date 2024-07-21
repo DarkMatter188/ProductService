@@ -14,8 +14,8 @@ public interface ProductService {
 
     List<Product> getProductByCategory(String category);
 
-    Product updateProduct(Long id, Product product);
-    Product replaceProduct(Long id, Product product);
+    Product updateProduct(Long id, Product product) throws ProductNotFoundException;
+    Product replaceProduct(Long id, Product product) throws ProductNotFoundException;
 
     Product addNewProduct(Product product);
 

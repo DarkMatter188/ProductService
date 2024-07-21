@@ -1,8 +1,10 @@
 package com.example.productservice.controllers;
 
 import com.example.productservice.ProductService.ProductService;
+import com.example.productservice.ProductService.SelfProductService;
 import com.example.productservice.exceptions.ProductNotFoundException;
 import com.example.productservice.models.Product;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.web.client.RestClientAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +21,11 @@ public class ProductController {
     private ProductService productService;
 
 
-    public ProductController(ProductService productService, RestClientAutoConfiguration restClientAutoConfiguration) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService, RestClientAutoConfiguration restClientAutoConfiguration) {
         this.productService = productService;
         this.restClientAutoConfiguration = restClientAutoConfiguration;
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         //Exception Handling
@@ -57,12 +60,12 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) throws ProductNotFoundException {
         return productService.updateProduct(id, product);
     }
 
     @PutMapping("/{id}")
-    public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+    public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) throws ProductNotFoundException {
         return productService.replaceProduct(id, product);
     }
 
@@ -74,7 +77,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     void deleteProductById(@PathVariable("id") Long id) {
-
+        productService.deleteProduct(id);
     }
 
 }
