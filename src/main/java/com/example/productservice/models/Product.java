@@ -1,7 +1,6 @@
 package com.example.productservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +11,9 @@ import lombok.Setter;
 public class Product extends BaseModel {
     String title;
     Double price;
-
-    @ManyToOne
+    //automatically save category in DB first
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn
     Category category;
     //M --------------- 1
     //Product ------ Category
