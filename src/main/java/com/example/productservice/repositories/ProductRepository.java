@@ -2,6 +2,9 @@ package com.example.productservice.repositories;
 
 import com.example.productservice.models.Product;
 import com.example.productservice.projections.ProductWithIdAndTitle;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,6 +16,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByPriceGreaterThan(Double price);
 
+    @Override
+    Page<Product> findAll(Pageable pageable);
     List<Product> findByTitleLike(String word);
 
     List<Product> findByTitleLikeIgnoreCase(String word);
@@ -32,5 +37,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //Native Queries MySQL hardcoded
     @Query(value = "select p.id, p.title from product p where p.id = :productId", nativeQuery = true)
     List<ProductWithIdAndTitle> randomSearch2(Long productId);
+
 
 }
