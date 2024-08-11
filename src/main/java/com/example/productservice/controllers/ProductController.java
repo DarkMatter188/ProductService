@@ -22,7 +22,7 @@ public class ProductController {
     private ProductService productService;
 
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService, RestClientAutoConfiguration restClientAutoConfiguration) {
+    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService, RestClientAutoConfiguration restClientAutoConfiguration) {
         this.productService = productService;
         this.restClientAutoConfiguration = restClientAutoConfiguration;
     }

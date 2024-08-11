@@ -7,6 +7,7 @@ import com.example.productservice.models.Product;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -23,9 +24,11 @@ import java.util.Map;
 
 public class FakeStoreProductService implements ProductService {
     private RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    FakeStoreProductService(RestTemplate restTemplate) {
+    FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     public Product convertFakeStoreProductToProduct(FakeStoreProductDto fakeStoreProductDto) {
@@ -49,13 +52,25 @@ public class FakeStoreProductService implements ProductService {
 
 //        throw new ArithmeticException();
 
+        //First try to fetch products from redis
+        Product product = (Product)redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+id);
+        if(product != null){
+            //Cache hit case
+            return product;
+        }
+
+        //Cache miss case
+
         FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id,
                 FakeStoreProductDto.class);
 
         if(fakeStoreProductDto == null){
             throw new ProductNotFoundException("Product with id does not exist ", id);
         }
-        return convertFakeStoreProductToProduct(fakeStoreProductDto);
+        product = convertFakeStoreProductToProduct(fakeStoreProductDto);
+        //store this product in redis
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_"+id, product);
+        return product;
     }
 
     @Override
