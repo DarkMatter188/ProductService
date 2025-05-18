@@ -38,5 +38,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select p.id, p.title from product p where p.id = :productId", nativeQuery = true)
     List<ProductWithIdAndTitle> randomSearch2(Long productId);
 
-
 }

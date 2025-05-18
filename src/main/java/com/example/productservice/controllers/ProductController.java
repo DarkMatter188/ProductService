@@ -1,5 +1,6 @@
 package com.example.productservice.controllers;
 
+import com.example.productservice.ProductService.FakeStoreProductService;
 import com.example.productservice.ProductService.ProductService;
 import com.example.productservice.ProductService.SelfProductService;
 import com.example.productservice.exceptions.ProductNotFoundException;
@@ -21,7 +22,6 @@ public class ProductController {
     //http methods to CRUD product
     private ProductService productService;
 
-
     public ProductController(@Qualifier("fakeStoreProductService") ProductService productService, RestClientAutoConfiguration restClientAutoConfiguration) {
         this.productService = productService;
         this.restClientAutoConfiguration = restClientAutoConfiguration;
@@ -42,8 +42,11 @@ public class ProductController {
 //                    HttpStatus.NOT_FOUND
 //            );
 //        }
+//        Product p = new Product();
+//        p.setTitle("IPhone 16 Pro");
         ResponseEntity<Product> responseEntity = new ResponseEntity<>(
                 productService.getSingleProduct(id),
+//                p,
                 HttpStatus.OK
         );
         return responseEntity;

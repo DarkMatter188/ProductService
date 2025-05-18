@@ -22,7 +22,6 @@ public class GlobalExceptionHandler {
         );
         return response;
     }
-
 //    @ExceptionHandler(NullPointerException.class)
 //    public ResponseEntity<String> handleNullPointerException(){
 //        ResponseEntity<String> response = new ResponseEntity<>(

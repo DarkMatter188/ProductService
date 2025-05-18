@@ -6,6 +6,7 @@ import com.example.productservice.models.Product;
 import com.example.productservice.repositories.CategoryRepository;
 import com.example.productservice.repositories.ProductRepository;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service("selfProductService")
-
+@Primary
 public class SelfProductService implements ProductService {
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
@@ -56,11 +57,9 @@ public class SelfProductService implements ProductService {
     //PATCH request
     public Product updateProduct (Long id, Product product) throws ProductNotFoundException{
         Optional<Product> optionalProduct = productRepository.findById(id);
-
         if(optionalProduct.isEmpty()){
             throw new ProductNotFoundException("Product with id does not exist", id);
         }
-
         Product productInDB = optionalProduct.get();
 
         if(product.getTitle() != null){
