@@ -4,6 +4,7 @@ import com.example.productservice.dtos.FakeStoreProductDto;
 import com.example.productservice.exceptions.ProductNotFoundException;
 import com.example.productservice.models.Category;
 import com.example.productservice.models.Product;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,7 +27,10 @@ public class FakeStoreProductService implements ProductService {
     private RestTemplate restTemplate;
     private RedisTemplate<String, Object> redisTemplate;
 
-    FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate) {
+    public FakeStoreProductService(
+            @Qualifier("plainRestTemplate") RestTemplate restTemplate,
+            RedisTemplate<String, Object> redisTemplate
+    ) {
         this.restTemplate = restTemplate;
         this.redisTemplate = redisTemplate;
     }
@@ -53,17 +57,17 @@ public class FakeStoreProductService implements ProductService {
 //        throw new ArithmeticException();
 
         //Calling userservice first by load-balanced way with eureka client
-        restTemplate.getForObject(
-                "http://userservice/users/sample",
-                Void.class
-        );
+//        restTemplate.getForObject(
+//                "http://userservice/users/sample",
+//                Void.class
+//        );
 
         //First try to fetch products from redis
-        Product product = (Product)redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+id);
-        if(product != null){
-            //Cache hit case
-            return product;
-        }
+//        Product product = (Product)redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+id);
+//        if(product != null){
+//            //Cache hit case
+//            return product;
+//        }
 
         //Cache miss case
 
@@ -73,10 +77,12 @@ public class FakeStoreProductService implements ProductService {
         if(fakeStoreProductDto == null){
             throw new ProductNotFoundException("Product with id does not exist ", id);
         }
-        product = convertFakeStoreProductToProduct(fakeStoreProductDto);
+//        product = convertFakeStoreProductToProduct(fakeStoreProductDto);
         //store this product in redis
-        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_"+id, product);
-        return product;
+//        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_"+id, product);
+//        return product;
+        System.out.println("Got the request from API Gateway port 6000!!");
+        return convertFakeStoreProductToProduct(fakeStoreProductDto);
     }
 
     @Override

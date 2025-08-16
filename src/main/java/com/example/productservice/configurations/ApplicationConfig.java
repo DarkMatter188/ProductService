@@ -12,7 +12,12 @@ public class ApplicationConfig {
 
     @Bean
     @LoadBalanced
-    public RestTemplate getRestTemplate(){
+    public RestTemplate loadBalancedRestTemplate(){
+        return new RestTemplate();
+    }
+
+    @Bean
+    public RestTemplate plainRestTemplate() {
         return new RestTemplate();
     }
 
