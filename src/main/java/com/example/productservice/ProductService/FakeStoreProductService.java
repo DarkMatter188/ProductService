@@ -52,6 +52,12 @@ public class FakeStoreProductService implements ProductService {
 
 //        throw new ArithmeticException();
 
+        //Calling userservice first by load-balanced way with eureka client
+        restTemplate.getForObject(
+                "http://userservice/users/sample",
+                Void.class
+        );
+
         //First try to fetch products from redis
         Product product = (Product)redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+id);
         if(product != null){

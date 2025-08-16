@@ -26,7 +26,7 @@ class SelfProductServiceTest {
 
         productRepositoryFake.save(expectedProduct);
 
-        assertEquals("One Piece", productRepositoryFake.findById(1L).getTitle());
+        assertEquals("One Piece", productRepositoryFake.findById(2L).getTitle());
 
     }
 

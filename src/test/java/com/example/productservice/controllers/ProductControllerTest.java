@@ -49,7 +49,7 @@ class ProductControllerTest {
 
         assertThrows(
                 ProductNotFoundException.class,
-                () -> productController.getProductById(1L)
+                () -> productController.getProductById(-1L)
         );
     }
 
